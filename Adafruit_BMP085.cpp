@@ -15,16 +15,27 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
+/*
+ * Cosmetically edited to allow for compilation on Intel Galileo, but
+ * should work as well for other boards.
+ *
+ * Changes:
+ *  - removed dependency on util/delay.h
+ *  - replaced calls to _delay_ms() by calls to delay()
+ *
+ * Gustaf Neumann
+ */
+
 #include "Adafruit_BMP085.h"
-#include <util/delay.h>
 
 Adafruit_BMP085::Adafruit_BMP085() {
 }
 
 
 boolean Adafruit_BMP085::begin(uint8_t mode) {
-  if (mode > BMP085_ULTRAHIGHRES) 
+  if (mode > BMP085_ULTRAHIGHRES) {
     mode = BMP085_ULTRAHIGHRES;
+  }
   oversampling = mode;
 
   Wire.begin();
@@ -64,7 +75,7 @@ boolean Adafruit_BMP085::begin(uint8_t mode) {
 
 uint16_t Adafruit_BMP085::readRawTemperature(void) {
   write8(BMP085_CONTROL, BMP085_READTEMPCMD);
-  _delay_ms(5);
+  delay(5);
 #if BMP085_DEBUG == 1
   Serial.print("Raw temp: "); Serial.println(read16(BMP085_TEMPDATA));
 #endif
@@ -77,13 +88,13 @@ uint32_t Adafruit_BMP085::readRawPressure(void) {
   write8(BMP085_CONTROL, BMP085_READPRESSURECMD + (oversampling << 6));
 
   if (oversampling == BMP085_ULTRALOWPOWER) 
-    _delay_ms(5);
+    delay(5);
   else if (oversampling == BMP085_STANDARD) 
-    _delay_ms(8);
+    delay(8);
   else if (oversampling == BMP085_HIGHRES) 
-    _delay_ms(14);
+    delay(14);
   else 
-    _delay_ms(26);
+    delay(26);
 
   raw = read16(BMP085_PRESSUREDATA);
 
@@ -218,7 +229,6 @@ float Adafruit_BMP085::readTemperature(void) {
 
 float Adafruit_BMP085::readAltitude(float sealevelPressure) {
   float altitude;
-
   float pressure = readPressure();
 
   altitude = 44330 * (1.0 - pow(pressure /sealevelPressure,0.1903));

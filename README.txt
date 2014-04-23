@@ -1,4 +1,5 @@
-This is a library for the Adafruit BMP085/BMP180 Barometric Pressure + Temp sensor
+This is a library for the Adafruit BMP085/BMP180 Barometric Pressure +
+Temp sensor. Adapted to work for Intel Galileo.
 
 Designed specifically to work with the Adafruit BMP085 or BMP180 Breakout 
   ----> http://www.adafruit.com/products/391
